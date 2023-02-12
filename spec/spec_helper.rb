@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'webmock/rspec'
+require 'byebug'
+
+ENV['DRAIN_PASSWORD'] = 'password'
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

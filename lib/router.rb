@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rack'
 require 'roda'
 require_relative 'log_controller'
 

@@ -15,6 +15,8 @@ GEM
     heroku-log-parser (0.4.0)
     public_suffix (5.0.1)
     rack (3.0.4.1)
+    rack-test (2.0.2)
+      rack (>= 1.3)
     rexml (3.2.5)
     roda (3.64.0)
       rack
@@ -44,6 +46,7 @@ DEPENDENCIES
   byebug
   faraday
   heroku-log-parser
+  rack-test
   roda
   rspec
   webmock

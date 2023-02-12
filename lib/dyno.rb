@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'faraday'
 
 module DarkKnight
   class Dyno
-    RUNTIME_METRICS_KEYS = %w[source sample#memory_quota sample#memory_total]
+    RUNTIME_METRICS_KEYS = %w[source sample#memory_quota sample#memory_total].freeze
 
     def self.from_runtime_metric(runtime_metric)
       new(
