@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 module ParsedLogHelpers
-  def parsed_log_runtime_metric(memory_total: nil)
+  def parsed_log_runtime_metric(dyno: nil, memory_total: nil)
+    dyno ||= 'heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e'
     memory_total ||= 7.11
 
     {
@@ -13,7 +14,7 @@ module ParsedLogHelpers
       proc_id: 'web.1',
       msg_id: nil,
       structured_data: nil,
-      message: "source=web.1 dyno=heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e sample#memory_total=#{memory_total}MB sample#memory_rss=1.07MB sample#memory_cache=6.04MB sample#memory_swap=0.00MB sample#memory_pgpgin=1978pages sample#memory_pgpgout=158pages sample#memory_quota=512.00MB"
+      message: "source=web.1 dyno=#{dyno} sample#memory_total=#{memory_total}MB sample#memory_rss=1.07MB sample#memory_cache=6.04MB sample#memory_swap=0.00MB sample#memory_pgpgin=1978pages sample#memory_pgpgout=158pages sample#memory_quota=512.00MB"
     }
   end
 

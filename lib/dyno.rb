@@ -16,14 +16,14 @@ module DarkKnight
       @source = source.to_s
       @memory_quota = memory_quota.to_f
       @memory_total = memory_total.to_f
-      @updated_at = DateTime.now
+      @updated_at = Time.now
     end
 
     def update_from_metric(runtime_metric)
       self.source = runtime_metric['source'].to_s
       self.memory_quota = runtime_metric['sample#memory_quota'].to_f
       self.memory_total = runtime_metric['sample#memory_total'].to_f
-      self.updated_at = DateTime.now
+      self.updated_at = Time.now
     end
 
     attr_accessor :source, :memory_quota, :memory_total, :updated_at
@@ -34,6 +34,10 @@ module DarkKnight
 
     def swapping?
       memory_total > memory_quota
+    end
+
+    def expired?
+      updated_at < Time.now - (5 * 60)
     end
 
     def restart

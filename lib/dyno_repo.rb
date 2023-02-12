@@ -8,6 +8,7 @@ module DarkKnight
 
     def update_repo_from_logs(logs)
       logs.each { |log| initialize_or_update_dyno_by(log) }
+      forget_expired_dynos
       restart_dynos_if_swapping
     end
 
@@ -23,6 +24,10 @@ module DarkKnight
       else
         dynos[dyno_id] = Dyno.from_runtime_metric(runtime_metric)
       end
+    end
+
+    def forget_expired_dynos
+      dynos.reject! { |_k, v| v.expired? }
     end
 
     def restart_dynos_if_swapping
