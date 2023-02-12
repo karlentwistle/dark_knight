@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
+require 'faraday'
+require 'heroku-log-parser'
 require 'rack'
 require 'roda'
+
+require_relative 'dyno'
+require_relative 'dyno_repo'
 require_relative 'log_controller'
+require_relative 'runtime_metric_parser'
 
 module DarkKnight
   class Application
-    def initialize
+    def initialize(dyno_repo: DynoRepo.new)
       @app = Class.new(Roda) do
         plugin :drop_body
 
@@ -17,7 +23,7 @@ module DarkKnight
         route do |r|
           # POST /logs
           r.post 'logs' do
-            controller = LogController.new
+            controller = LogController.new(dyno_repo: dyno_repo)
             response.status, body = controller.call(request)
             body
           end

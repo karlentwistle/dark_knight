@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'faraday'
-
 module DarkKnight
   class Dyno
     RUNTIME_METRICS_KEYS = %w[source sample#memory_quota sample#memory_total].freeze
