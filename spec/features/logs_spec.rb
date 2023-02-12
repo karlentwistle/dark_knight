@@ -2,13 +2,13 @@
 
 require 'spec_helper'
 require 'rack/test'
-require_relative '../../lib/router'
+require_relative '../../lib/application'
 
 RSpec.describe '/logs' do
   include Rack::Test::Methods
 
   def app
-    DarkKnight::Router.new.app
+    DarkKnight::Application.new.app
   end
 
   it 'responds with no content' do

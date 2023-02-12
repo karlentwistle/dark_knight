@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'lib/router'
+require_relative 'lib/application'
 
-run DarkKnight::Router.new.app
+run DarkKnight::Application.new.app

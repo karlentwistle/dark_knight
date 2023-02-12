@@ -5,7 +5,7 @@ require 'roda'
 require_relative 'log_controller'
 
 module DarkKnight
-  class Router
+  class Application
     def initialize
       @app = Class.new(Roda) do
         plugin :drop_body
