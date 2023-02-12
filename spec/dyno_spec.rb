@@ -2,15 +2,13 @@
 
 require 'spec_helper'
 
-require_relative '../lib/dyno'
-
 RSpec.describe DarkKnight::Dyno do
   describe '#from_runtime_metric' do
     it 'creates a dyno object' do
       subject = described_class.from_runtime_metric(web_runtime_metric)
 
       expect(subject).to eq(
-        DarkKnight::Dyno.new(
+        described_class.new(
           source: 'web.1',
           memory_quota: 512.00,
           memory_total: 7.11
@@ -22,7 +20,7 @@ RSpec.describe DarkKnight::Dyno do
       subject = described_class.from_runtime_metric({})
 
       expect(subject).to eq(
-        DarkKnight::Dyno.new(
+        described_class.new(
           source: '',
           memory_quota: 0,
           memory_total: 0
@@ -35,14 +33,14 @@ RSpec.describe DarkKnight::Dyno do
     it 'issues http request to heroku api if memory_total exceeds memory_total' do
       stub_restart_request('todo', 'web.1')
 
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
       subject.restart_if_swapping
 
       expect_restart_request('todo', 'web.1')
     end
 
     it 'does nothing if memory_total equals memory_total' do
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
 
       subject.restart_if_swapping
 
@@ -50,7 +48,7 @@ RSpec.describe DarkKnight::Dyno do
     end
 
     it 'does nothing false if memory_total is lower than memory_total' do
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
 
       subject.restart_if_swapping
 
@@ -62,7 +60,7 @@ RSpec.describe DarkKnight::Dyno do
     it 'issues http request to heroku api' do
       stub_restart_request('todo', 'web.1')
 
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
       subject.restart
 
@@ -72,23 +70,25 @@ RSpec.describe DarkKnight::Dyno do
 
   describe '#swapping?' do
     it 'returns true if memory_total exceeds memory_total' do
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
       expect(subject).to be_swapping
     end
 
     it 'returns false if memory_total equals memory_total' do
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
 
       expect(subject).not_to be_swapping
     end
 
     it 'returns false if memory_total is lower than memory_total' do
-      subject = DarkKnight::Dyno.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
 
       expect(subject).not_to be_swapping
     end
   end
+
+  private
 
   def web_runtime_metric
     {

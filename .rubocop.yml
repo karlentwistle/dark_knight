@@ -1,0 +1,17 @@
+AllCops:
+  NewCops: enable
+
+require:
+  - rubocop-performance
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false

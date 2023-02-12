@@ -16,9 +16,17 @@ module DarkKnight
       @source = source.to_s
       @memory_quota = memory_quota.to_f
       @memory_total = memory_total.to_f
+      @updated_at = DateTime.now
     end
 
-    attr_reader :source, :memory_quota, :memory_total
+    def update_from_metric(runtime_metric)
+      self.source = runtime_metric['source'].to_s
+      self.memory_quota = runtime_metric['sample#memory_quota'].to_f
+      self.memory_total = runtime_metric['sample#memory_total'].to_f
+      self.updated_at = DateTime.now
+    end
+
+    attr_accessor :source, :memory_quota, :memory_total, :updated_at
 
     def restart_if_swapping
       restart if swapping?

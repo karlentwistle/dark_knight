@@ -12,7 +12,11 @@ require_relative 'runtime_metric_parser'
 
 module DarkKnight
   class Application
-    def initialize(dyno_repo: DynoRepo.new)
+    def self.logger
+      Logger.new($stdout).tap { |l| l.level = ENV.fetch('LOG_LEVEL', Logger::Severity::INFO) }
+    end
+
+    def initialize(dyno_repo: DynoRepo.new, logger: self.class.logger)
       @app = Class.new(Roda) do
         plugin :drop_body
 
@@ -23,7 +27,7 @@ module DarkKnight
         route do |r|
           # POST /logs
           r.post 'logs' do
-            controller = LogController.new(dyno_repo: dyno_repo)
+            controller = LogController.new(dyno_repo: dyno_repo, logger: logger)
             response.status, body = controller.call(request)
             body
           end

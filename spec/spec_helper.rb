@@ -2,8 +2,11 @@
 
 require 'webmock/rspec'
 require 'byebug'
+require_relative '../lib/application'
 
 ENV['DRAIN_PASSWORD'] = 'password'
+
+Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

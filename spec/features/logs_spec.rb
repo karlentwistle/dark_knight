@@ -12,11 +12,15 @@ RSpec.describe '/logs' do
   end
 
   it 'responds with no content' do
-    runtime_metric_path = File.join(File.dirname(__FILE__), '../fixtures/runtime_metric/web.1')
-    runtime_metric = File.read(runtime_metric_path)
+    basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
+    post('/logs', log_fixture('web.1'))
 
-    basic_authorize 'username', ENV['DRAIN_PASSWORD']
-    post('/logs', runtime_metric)
+    expect(last_response).to be_no_content
+  end
+
+  it 'ignores logplex logs' do
+    basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
+    post('/logs', log_fixture('logplex'))
 
     expect(last_response).to be_no_content
   end
