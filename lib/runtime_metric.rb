@@ -30,7 +30,27 @@ module DarkKnight
     private
 
     def relevant?
-      log[:proc_id].to_s.match?(DYNO_SERVICE)
+      dyno_service? && monitored_proc_id?
+    end
+
+    def dyno_service?
+      proc_id.match?(DYNO_SERVICE)
+    end
+
+    def monitored_types
+      ENV.fetch('DYNO_TYPES', 'web').split(',')
+    end
+
+    def monitored_proc_id?
+      monitored_types.include?(proc_type)
+    end
+
+    def proc_id
+      log[:proc_id].to_s
+    end
+
+    def proc_type
+      proc_id.split('.')[0]
     end
 
     attr_reader :log
