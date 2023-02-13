@@ -13,7 +13,7 @@ module DarkKnight
     end
 
     def initialize_or_update_dyno_by(log)
-      runtime_metric = RuntimeMetricParser.parse(log)
+      runtime_metric = RuntimeMetric.new(log).to_h
 
       return if runtime_metric.empty?
 

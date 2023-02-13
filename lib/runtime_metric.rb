@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
 module DarkKnight
-  module RuntimeMetricParser
+  class RuntimeMetric
     ASSIGN_CHAR = '='
     SPACE_CHAR = ' '
     DYNO_SERVICE = /\.\d+\Z/.freeze
 
-    def self.parse(log)
+    def initialize(log)
+      @log = log
+    end
+
+    def to_h
       return {} unless log[:proc_id].to_s.match?(DYNO_SERVICE)
 
       log
@@ -14,5 +18,7 @@ module DarkKnight
         .split(SPACE_CHAR)
         .to_h { |y| y.split(ASSIGN_CHAR) }
     end
+
+    attr_reader :log
   end
 end

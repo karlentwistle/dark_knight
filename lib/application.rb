@@ -9,7 +9,7 @@ require_relative 'dyno'
 require_relative 'dyno_repo'
 require_relative 'log_controller'
 require_relative 'restart_dyno'
-require_relative 'runtime_metric_parser'
+require_relative 'runtime_metric'
 
 module DarkKnight
   class Application

@@ -2,11 +2,11 @@
 
 require 'spec_helper'
 
-RSpec.describe DarkKnight::RuntimeMetricParser do
-  describe '.parse' do
+RSpec.describe DarkKnight::RuntimeMetric do
+  describe '#to_h' do
     context 'log_runtime_metrics' do
       it 'parses message' do
-        subject = described_class.parse(parsed_log_runtime_metric)
+        subject = described_class.new(parsed_log_runtime_metric).to_h
 
         expect(subject).to eql(
           {
@@ -26,7 +26,7 @@ RSpec.describe DarkKnight::RuntimeMetricParser do
 
     context 'http_request' do
       it 'returns an empty hash' do
-        subject = described_class.parse(parsed_log_http_request)
+        subject = described_class.new(parsed_log_http_request).to_h
 
         expect(subject).to eql({})
       end
@@ -34,7 +34,7 @@ RSpec.describe DarkKnight::RuntimeMetricParser do
 
     context 'logplex' do
       it 'returns an empty hash' do
-        subject = described_class.parse(parsed_log_logplex)
+        subject = described_class.new(parsed_log_logplex).to_h
 
         expect(subject).to eql({})
       end
@@ -42,7 +42,7 @@ RSpec.describe DarkKnight::RuntimeMetricParser do
 
     context 'invalid request' do
       it 'returns an empty hash' do
-        subject = described_class.parse({})
+        subject = described_class.new({}).to_h
 
         expect(subject).to eql({})
       end
