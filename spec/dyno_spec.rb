@@ -123,7 +123,8 @@ RSpec.describe DarkKnight::Dyno do
   def restart_headers
     {
       'Accept' => 'application/vnd.heroku+json; version=3',
-      'Content-Type' => 'application/json'
+      'Content-Type' => 'application/json',
+      'Authorization' => 'Bearer 01234567-89ab-cdef-0123-456789abcdef'
     }
   end
 
