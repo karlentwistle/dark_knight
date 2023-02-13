@@ -41,11 +41,7 @@ module DarkKnight
     end
 
     def restart
-      heroku_connection.delete("/apps/#{app_id_or_name}/dynos/#{source}")
-    end
-
-    def app_id_or_name
-      'todo'
+      RestartDyno.run(self)
     end
 
     def ==(other)
@@ -53,18 +49,6 @@ module DarkKnight
         source == other.source &&
         memory_quota == other.memory_quota &&
         memory_total == other.memory_total
-    end
-
-    private
-
-    def heroku_connection
-      @heroku_connection ||= Faraday.new(
-        url: 'https://api.heroku.com/',
-        headers: {
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/vnd.heroku+json; version=3'
-        }
-      )
     end
   end
 end

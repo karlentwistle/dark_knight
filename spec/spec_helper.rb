@@ -6,6 +6,7 @@ require 'timecop'
 require_relative '../lib/application'
 
 ENV['DRAIN_PASSWORD'] = 'password'
+ENV['APP_ID_OR_NAME'] = 'todo'
 
 Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }
 
