@@ -48,4 +48,38 @@ RSpec.describe DarkKnight::RuntimeMetric do
       end
     end
   end
+
+  describe '#irrelevant?' do
+    context 'log_runtime_metrics' do
+      it 'returns false' do
+        subject = described_class.new(parsed_log_runtime_metric)
+
+        expect(subject).not_to be_irrelevant
+      end
+    end
+
+    context 'http_request' do
+      it 'returns true' do
+        subject = described_class.new(parsed_log_http_request)
+
+        expect(subject).to be_irrelevant
+      end
+    end
+
+    context 'logplex' do
+      it 'returns true' do
+        subject = described_class.new(parsed_log_logplex)
+
+        expect(subject).to be_irrelevant
+      end
+    end
+
+    context 'invalid request' do
+      it 'returns true' do
+        subject = described_class.new({})
+
+        expect(subject).to be_irrelevant
+      end
+    end
+  end
 end

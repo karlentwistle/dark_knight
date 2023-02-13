@@ -13,16 +13,16 @@ module DarkKnight
     end
 
     def initialize_or_update_dyno_by(log)
-      runtime_metric = RuntimeMetric.new(log).to_h
+      runtime_metric = RuntimeMetric.new(log)
 
-      return if runtime_metric.empty?
+      return if runtime_metric.irrelevant?
 
-      dyno_id = runtime_metric.fetch('dyno')
+      dyno_id = runtime_metric.to_h.fetch('dyno')
 
       if dynos.key?(dyno_id)
-        dynos[dyno_id].update_from_metric(runtime_metric)
+        dynos[dyno_id].update_from_metric(runtime_metric.to_h)
       else
-        dynos[dyno_id] = Dyno.from_runtime_metric(runtime_metric)
+        dynos[dyno_id] = Dyno.from_runtime_metric(runtime_metric.to_h)
       end
     end
 

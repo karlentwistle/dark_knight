@@ -11,12 +11,22 @@ module DarkKnight
     end
 
     def to_h
-      return {} unless log[:proc_id].to_s.match?(DYNO_SERVICE)
+      return {} unless relevant?
 
       log
         .fetch(:message, '')
         .split(SPACE_CHAR)
         .to_h { |y| y.split(ASSIGN_CHAR) }
+    end
+
+    def irrelevant?
+      !relevant?
+    end
+
+    private
+
+    def relevant?
+      log[:proc_id].to_s.match?(DYNO_SERVICE)
     end
 
     attr_reader :log
