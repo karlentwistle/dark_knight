@@ -15,7 +15,10 @@ module DarkKnight
             Accept: 'application/vnd.heroku+json; version=3',
             Authorization: "Bearer #{auth_token}"
           }
-        )
+        ) do |f|
+          f.options.open_timeout = 10
+          f.options.timeout = 10
+        end
       end
 
       def app_id_or_name
