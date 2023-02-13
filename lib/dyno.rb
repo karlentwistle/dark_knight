@@ -29,6 +29,8 @@ module DarkKnight
     attr_accessor :source, :memory_quota, :memory_total, :updated_at
 
     def restart_if_swapping
+      return if restarting?
+
       restart if swapping?
     end
 
@@ -41,7 +43,16 @@ module DarkKnight
     end
 
     def restart
-      RestartDyno.run(source)
+      response = RestartDyno.run(source)
+      restarting! if response.success?
+    end
+
+    def restarting!
+      @restarting = true
+    end
+
+    def restarting?
+      !!@restarting
     end
 
     def ==(other)

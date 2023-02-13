@@ -39,6 +39,15 @@ RSpec.describe DarkKnight::Dyno do
       expect_restart_request('todo', 'web.1')
     end
 
+    it 'issues one http request to heroku api even if called multiple times' do
+      stub_restart_request('todo', 'web.1')
+
+      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      2.times { subject.restart_if_swapping }
+
+      expect_restart_request('todo', 'web.1')
+    end
+
     it 'does nothing if memory total equals memory quota' do
       subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
 
