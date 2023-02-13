@@ -2,7 +2,7 @@
 
 ## Todo
 
-- Issue restart requests again the dyno id rather than the dyno source
+- Issue restart requests against the dyno id rather than the dyno source
 - Write README
 - Add deploy to Heroku button
 
