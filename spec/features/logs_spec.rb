@@ -18,6 +18,15 @@ RSpec.describe '/logs' do
     expect(last_response).to be_no_content
   end
 
+  it 'doesnt issue restart request for dyno within memory limits' do
+    with_env('DYNO_TYPES', 'web') do
+      basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
+      post('/logs', log_fixture('web.1'))
+    end
+
+    expect_no_request
+  end
+
   it 'issues restart request for out of memory dyno of monitored type' do
     stub_restart_request('todo', 'web.1')
 
