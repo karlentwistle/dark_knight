@@ -23,6 +23,10 @@ module DarkKnight
       !relevant?
     end
 
+    def dyno
+      to_h.fetch('dyno')
+    end
+
     private
 
     def relevant?

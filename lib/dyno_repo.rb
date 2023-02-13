@@ -17,12 +17,12 @@ module DarkKnight
 
       return if runtime_metric.irrelevant?
 
-      dyno_id = runtime_metric.to_h.fetch('dyno')
+      dyno = runtime_metric.dyno
 
-      if dynos.key?(dyno_id)
-        dynos[dyno_id].update_from_metric(runtime_metric.to_h)
+      if dynos.key?(dyno)
+        dynos[dyno].update_from_metric(runtime_metric.to_h)
       else
-        dynos[dyno_id] = Dyno.from_runtime_metric(runtime_metric.to_h)
+        dynos[dyno] = Dyno.from_runtime_metric(runtime_metric.to_h)
       end
     end
 

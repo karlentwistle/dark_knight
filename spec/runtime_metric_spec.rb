@@ -82,4 +82,12 @@ RSpec.describe DarkKnight::RuntimeMetric do
       end
     end
   end
+
+  describe '#dyno' do
+    it 'returns dyno' do
+      subject = described_class.new(parsed_log_runtime_metric)
+
+      expect(subject.dyno).to eql('heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e')
+    end
+  end
 end
