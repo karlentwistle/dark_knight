@@ -52,7 +52,7 @@ RSpec.describe DarkKnight::RuntimeMetric do
   describe '#irrelevant?' do
     context 'log_runtime_metrics' do
       it 'returns false if dyno is a monitored type' do
-        with_dyno_types_env('web') do
+        with_env('DYNO_TYPES', 'web') do
           subject = described_class.new(parsed_log_runtime_metric)
 
           expect(subject).not_to be_irrelevant
@@ -60,7 +60,7 @@ RSpec.describe DarkKnight::RuntimeMetric do
       end
 
       it 'returns true if dyno isnt a monitored type' do
-        with_dyno_types_env('worker1,worker2') do
+        with_env('DYNO_TYPES', 'worker1,worker2') do
           subject = described_class.new(parsed_log_runtime_metric)
 
           expect(subject).to be_irrelevant
@@ -99,13 +99,5 @@ RSpec.describe DarkKnight::RuntimeMetric do
 
       expect(subject.dyno).to eql('heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e')
     end
-  end
-
-  def with_dyno_types_env(dyno_types)
-    pervious_dyno_types = ENV.fetch('DYNO_TYPES', nil)
-
-    ENV['DYNO_TYPES'] = dyno_types
-    yield
-    ENV['DYNO_TYPES'] = pervious_dyno_types
   end
 end

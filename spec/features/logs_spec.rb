@@ -18,6 +18,17 @@ RSpec.describe '/logs' do
     expect(last_response).to be_no_content
   end
 
+  it 'issues restart request for out of memory dyno of monitored type' do
+    stub_restart_request('todo', 'web.1')
+
+    with_env('DYNO_TYPES', 'web') do
+      basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
+      post('/logs', log_fixture('web.1.out_of_memory'))
+    end
+
+    expect_restart_request('todo', 'web.1')
+  end
+
   it 'ignores logplex logs' do
     basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
     post('/logs', log_fixture('logplex'))
