@@ -41,7 +41,7 @@ module DarkKnight
     end
 
     def restart
-      RestartDyno.run(self)
+      RestartDyno.run(source)
     end
 
     def ==(other)

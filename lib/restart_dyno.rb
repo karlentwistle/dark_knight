@@ -3,8 +3,8 @@
 module DarkKnight
   module RestartDyno
     class << self
-      def run(dyno)
-        connection.delete("/apps/#{app_id_or_name}/dynos/#{dyno.source}")
+      def run(source)
+        connection.delete("/apps/#{app_id_or_name}/dynos/#{source}")
       end
 
       def connection
