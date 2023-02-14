@@ -1,14 +1,14 @@
+# frozen_string_literal: true
+
 require 'logger'
 
 module Logging
   class << self
     def logger
-      @logger ||= Logger.new($stdout).tap { |l| l.level = ENV.fetch("LOG_LEVEL", Logger::Severity::INFO) }
+      @logger ||= Logger.new($stdout).tap { |l| l.level = ENV.fetch('LOG_LEVEL', Logger::Severity::INFO) }
     end
 
-    def logger=(new_logger)
-      @logger = new_logger
-    end
+    attr_writer :logger
   end
 
   # Addition
