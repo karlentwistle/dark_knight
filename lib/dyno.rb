@@ -2,6 +2,8 @@
 
 module DarkKnight
   class Dyno
+    include Logging
+
     RUNTIME_METRICS_KEYS = %w[source sample#memory_quota sample#memory_total].freeze
 
     def self.from_runtime_metric(runtime_metric)
@@ -48,6 +50,7 @@ module DarkKnight
     end
 
     def restarting!
+      logger.info("restarting dyno #{source}")
       @restarting = true
     end
 
