@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'faraday'
 gem 'heroku-log-parser'
+gem 'puma'
 gem 'rackup'
 gem 'roda'
 
