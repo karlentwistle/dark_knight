@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 gem 'faraday'
 gem 'heroku-log-parser'
+gem 'rackup'
 gem 'roda'
 
 group :development, :test do
