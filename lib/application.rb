@@ -5,6 +5,7 @@ require 'heroku-log-parser'
 require 'rack'
 require 'roda'
 
+require_relative 'logging'
 require_relative 'dyno'
 require_relative 'dyno_repo'
 require_relative 'log_controller'
@@ -13,11 +14,7 @@ require_relative 'runtime_metric'
 
 module DarkKnight
   class Application
-    def self.logger
-      Logger.new($stdout).tap { |l| l.level = ENV.fetch('LOG_LEVEL', Logger::Severity::INFO) }
-    end
-
-    def initialize(dyno_repo: DynoRepo.new, logger: self.class.logger)
+    def initialize(dyno_repo: DynoRepo.new)
       @app = Class.new(Roda) do
         plugin :drop_body
 
@@ -28,7 +25,7 @@ module DarkKnight
         route do |r|
           # POST /logs
           r.post 'logs' do
-            controller = LogController.new(dyno_repo: dyno_repo, logger: logger)
+            controller = LogController.new(dyno_repo: dyno_repo)
             response.status, body = controller.call(request)
             body
           end

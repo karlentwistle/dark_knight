@@ -2,9 +2,10 @@
 
 module DarkKnight
   class LogController
-    def initialize(dyno_repo:, logger:)
+    include Logging
+
+    def initialize(dyno_repo:)
       @dyno_repo = dyno_repo
-      @logger = logger
     end
 
     def call(request)
@@ -20,6 +21,6 @@ module DarkKnight
 
     private
 
-    attr_reader :dyno_repo, :logger
+    attr_reader :dyno_repo
   end
 end
