@@ -5,7 +5,30 @@
 - Write README
 - Add deploy to Heroku button
 
-## Configuration
+## Setup
+
+### Deploying the Dark Knight
+
+To deploy the drain:
+
+    $ git clone https://github.com/karlentwistle/dark_knight.git
+    $ heroku apps create
+    $ heroku buildpacks:add heroku/ruby
+    $ heroku config:set APP_ID_OR_NAME=<ID_OR_NAME_OF_HEROKU_APP_BEING_MONITORED>
+    $ heroku config:set DRAIN_PASSWORD=<YOUR_DRAIN_PASSWORD>
+    $ heroku config:set AUTH_TOKEN=<HEROKU_API_AUTHENTICATION_TOKEN>
+    $ heroku config:set DYNO_TYPES=web,worker
+    $ heroku config:set RACK_ENV=production
+    $ git push heroku main
+
+### Instrumenting an App
+
+To instrument an app:
+
+    $ heroku labs:enable log-runtime-metrics --app <ID_OR_NAME_OF_HEROKU_APP_BEING_MONITORED>
+    $ heroku drains:add https://user:<YOUR_DRAIN_PASSWORD>@<YOUR_DARK_KNIGHT_APP>.herokuapp.com/logs --app <ID_OR_NAME_OF_HEROKU_APP_BEING_MONITORED>
+
+### Configuration
 
 The following is the full list of ENV configuration options:
 
