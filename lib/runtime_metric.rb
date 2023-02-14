@@ -39,7 +39,7 @@ module DarkKnight
     end
 
     def runtime_metric_log?
-      log_message_split.size == 9
+      app_name == 'heroku' && log_message_split.size == 9
     end
 
     def dyno_service?
@@ -56,6 +56,10 @@ module DarkKnight
 
     def proc_id
       log[:proc_id].to_s
+    end
+
+    def app_name
+      log[:appname].to_s
     end
 
     def proc_type
