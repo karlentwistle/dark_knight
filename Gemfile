@@ -12,6 +12,8 @@ group :development, :test do
   gem 'byebug'
   gem 'rack-test'
   gem 'rspec'
+  gem 'rubocop'
+  gem 'rubocop-performance'
   gem 'timecop'
   gem 'webmock'
 end
