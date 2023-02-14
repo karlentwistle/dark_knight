@@ -1,0 +1,30 @@
+{
+  "name": "Dark Knight",
+  "description": "Automatically restart heroku dynos with R14",
+  "repository": "https://github.com/karlentwistle/dark_knight",
+  "logo": "https://node-js-sample.herokuapp.com/node.png",
+  "keywords": ["r14", "swapping", "restart"],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "env": {
+    "DRAIN_PASSWORD": {
+      "description": "HTTPS drain password.",
+      "value": ""
+    },
+    "APP_ID_OR_NAME": {
+      "description": "ID or name of Heroku app being monitored - https://{app_id_or_name}.herokuapp.com.",
+      "value": ""
+    },
+    "AUTH_TOKEN": {
+      "description": "Heroku API authentication token",
+      "value": ""
+    },
+    "DYNO_TYPES": {
+      "description": "Dynos to restart when swapping (R14)",
+      "value": "web,worker"
+    }
+  }
+}
