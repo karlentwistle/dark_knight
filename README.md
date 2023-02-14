@@ -12,7 +12,7 @@
 To deploy the drain:
 
     $ git clone https://github.com/karlentwistle/dark_knight.git
-    $ heroku apps create
+    $ heroku create <your_dark_knight_app_name>
     $ heroku buildpacks:add heroku/ruby
     $ heroku config:set APP_ID_OR_NAME=<ID_OR_NAME_OF_HEROKU_APP_BEING_MONITORED>
     $ heroku config:set DRAIN_PASSWORD=<YOUR_DRAIN_PASSWORD>
