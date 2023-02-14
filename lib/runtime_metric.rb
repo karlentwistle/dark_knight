@@ -13,10 +13,7 @@ module DarkKnight
     def to_h
       return {} unless relevant?
 
-      log
-        .fetch(:message, '')
-        .split(SPACE_CHAR)
-        .to_h { |y| y.split(ASSIGN_CHAR) }
+      log_message_split.to_h { |y| y.split(ASSIGN_CHAR) }
     end
 
     def irrelevant?
@@ -29,8 +26,20 @@ module DarkKnight
 
     private
 
+    def log_message
+      log.fetch(:message, '')
+    end
+
+    def log_message_split
+      log_message.split(SPACE_CHAR)
+    end
+
     def relevant?
-      dyno_service? && monitored_proc_id?
+      runtime_metric_log? && dyno_service? && monitored_proc_id?
+    end
+
+    def runtime_metric_log?
+      log_message_split.size == 9
     end
 
     def dyno_service?

@@ -18,6 +18,15 @@ RSpec.describe '/logs' do
     expect(last_response).to be_no_content
   end
 
+  it 'successfully parses logs' do
+    with_env('DYNO_TYPES', 'web') do
+      basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
+      post('/logs', log_fixture('web.1.restarting'))
+    end
+
+    expect(last_response).to be_no_content
+  end
+
   it 'doesnt issue restart request for dyno within memory limits' do
     with_env('DYNO_TYPES', 'web') do
       basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
