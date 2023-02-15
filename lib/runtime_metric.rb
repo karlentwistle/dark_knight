@@ -13,7 +13,7 @@ module DarkKnight
     def to_h
       return {} unless relevant?
 
-      log_message_split.to_h { |y| y.split(ASSIGN_CHAR) }
+      split_log_message.to_h { |y| y.split(ASSIGN_CHAR) }
     end
 
     def irrelevant?
@@ -30,20 +30,20 @@ module DarkKnight
       log.fetch(:message, '')
     end
 
-    def log_message_split
+    def split_log_message
       log_message.split(SPACE_CHAR)
     end
 
     def relevant?
-      runtime_metric_log? && dyno_service? && monitored_proc_id?
+      heroku_service? && monitored_proc_id? && runtime_metric_log?
     end
 
     def runtime_metric_log?
-      app_name == 'heroku' && log_message_split.size == 9
+      split_log_message.size == 9
     end
 
-    def dyno_service?
-      proc_id.match?(DYNO_SERVICE)
+    def heroku_service?
+      proc_id.match?(DYNO_SERVICE) && app_name == 'heroku'
     end
 
     def monitored_types
