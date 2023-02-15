@@ -10,6 +10,8 @@ Once a Heroku dyno starts swapping to disk, it becomes comparatively slow and un
 
 ## Setup
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/karlentwistle/dark_knight)
+
 ### Deploying the Dark Knight
 
 To deploy the service:
