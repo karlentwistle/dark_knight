@@ -12,7 +12,7 @@ module ParsedLogHelpers
       emitted_at: '2023-02-11 20:17:07.957556 UTC',
       hostname: 'host',
       appname: 'heroku',
-      proc_id: proc_id,
+      proc_id:,
       msg_id: nil,
       structured_data: nil,
       message: "source=#{proc_id} dyno=#{dyno} sample#memory_total=#{memory_total}MB sample#memory_rss=1.07MB sample#memory_cache=6.04MB sample#memory_swap=0.00MB sample#memory_pgpgin=1978pages sample#memory_pgpgout=158pages sample#memory_quota=512.00MB"

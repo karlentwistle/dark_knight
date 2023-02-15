@@ -2,7 +2,7 @@
 
 module DarkKnight
   class HerokuLog
-    DYNO_SERVICE = /\.\d+\Z/.freeze
+    DYNO_SERVICE = /\.\d+\Z/
 
     def self.from_logs(buffer)
       HerokuLogParser

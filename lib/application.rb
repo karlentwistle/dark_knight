@@ -27,7 +27,7 @@ module DarkKnight
         route do |r|
           # POST /logs
           r.post 'logs' do
-            controller = LogController.new(dyno_repo: dyno_repo)
+            controller = LogController.new(dyno_repo:)
             response.status, body = controller.call(request)
             body
           end

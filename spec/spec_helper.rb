@@ -9,7 +9,7 @@ ENV['DRAIN_PASSWORD'] = 'password'
 ENV['APP_ID_OR_NAME'] = 'todo'
 ENV['AUTH_TOKEN'] = '01234567-89ab-cdef-0123-456789abcdef'
 
-Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }
+Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
