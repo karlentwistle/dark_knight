@@ -2,7 +2,7 @@
 
 The Dark Knight automatically restarts your Heroku dynos if they start swapping to disk [R14 - Memory Quota Exceeded in Ruby (MRI)](https://devcenter.heroku.com/articles/ruby-memory-use).
 
-Once a Heroku dyno starts swapping to disk, it becomes comparatively slow and unresponsive, so taking it out of formation is the best course of action.
+Once a Heroku dyno starts swapping to disk, it becomes comparatively slow and unresponsive, so taking it out of the formation is the best course of action.
 
 > He's a silent guardian, a watchful protector. A dark knight.
 
