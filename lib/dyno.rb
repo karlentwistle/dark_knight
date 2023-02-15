@@ -4,27 +4,25 @@ module DarkKnight
   class Dyno
     include Logging
 
-    RUNTIME_METRICS_KEYS = %w[source sample#memory_quota sample#memory_total].freeze
-
     def self.from_runtime_metric(runtime_metric)
       new(
-        source: runtime_metric['source'],
-        memory_quota: runtime_metric['sample#memory_quota'],
-        memory_total: runtime_metric['sample#memory_total']
+        source: runtime_metric.source,
+        memory_quota: runtime_metric.memory_quota,
+        memory_total: runtime_metric.memory_total
       )
     end
 
     def initialize(source:, memory_quota:, memory_total:)
-      @source = source.to_s
-      @memory_quota = memory_quota.to_f
-      @memory_total = memory_total.to_f
+      @source = source
+      @memory_quota = memory_quota
+      @memory_total = memory_total
       @updated_at = Time.now
     end
 
     def update_from_metric(runtime_metric)
-      self.source = runtime_metric['source'].to_s
-      self.memory_quota = runtime_metric['sample#memory_quota'].to_f
-      self.memory_total = runtime_metric['sample#memory_total'].to_f
+      self.source = runtime_metric.source
+      self.memory_quota = runtime_metric.memory_quota
+      self.memory_total = runtime_metric.memory_total
       self.updated_at = Time.now
     end
 

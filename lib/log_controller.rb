@@ -13,8 +13,10 @@ module DarkKnight
 
       logger.debug("[#{self.class}#call] #{buffer}")
 
-      logs = HerokuLogParser.parse(buffer)
-      dyno_repo.update_repo_from_logs(logs)
+      heroku_logs = HerokuLog.from_logs(buffer)
+      runtime_metrics = RuntimeMetric.from_heroku_logs(heroku_logs)
+
+      dyno_repo.update_repo(runtime_metrics)
 
       [204, '']
     end

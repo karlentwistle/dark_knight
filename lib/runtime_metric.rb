@@ -4,68 +4,58 @@ module DarkKnight
   class RuntimeMetric
     ASSIGN_CHAR = '='
     SPACE_CHAR = ' '
-    DYNO_SERVICE = /\.\d+\Z/.freeze
+    VALID_RUNTIME_METRICS_COUNT = 9
 
-    def initialize(log)
-      @log = log
+    def self.from_heroku_logs(heroku_logs)
+      heroku_logs
+        .select { |heroku_log| valid_runtime_metric?(heroku_log) }
+        .map { |runtime_metric_log| new(runtime_metric_log) }
     end
 
-    def to_h
-      return {} unless relevant?
+    def self.valid_runtime_metric?(heroku_log)
+      split_log = heroku_log.message.split(SPACE_CHAR)
 
-      split_log_message.to_h { |y| y.split(ASSIGN_CHAR) }
+      return false if split_log.size != VALID_RUNTIME_METRICS_COUNT
+
+      split_log
+        .map { |metric| metric.split(ASSIGN_CHAR) }
+        .all? { |metric| metric.length == 2 }
     end
 
-    def irrelevant?
-      !relevant?
+    def initialize(heroku_log)
+      @heroku_log = heroku_log
     end
 
     def dyno
-      to_h.fetch('dyno')
+      runtime_metrics['dyno']
+    end
+
+    def source
+      runtime_metrics['source'].to_s
+    end
+
+    def memory_quota
+      runtime_metrics['sample#memory_quota'].to_f
+    end
+
+    def memory_total
+      runtime_metrics['sample#memory_total'].to_f
+    end
+
+    def monitored_dyno?
+      monitored_types.include?(heroku_log.proc_type)
     end
 
     private
 
-    def log_message
-      log.fetch(:message, '')
-    end
-
-    def split_log_message
-      log_message.split(SPACE_CHAR)
-    end
-
-    def relevant?
-      heroku_service? && monitored_proc_id? && runtime_metric_log?
-    end
-
-    def runtime_metric_log?
-      split_log_message.size == 9
-    end
-
-    def heroku_service?
-      proc_id.match?(DYNO_SERVICE) && app_name == 'heroku'
+    def runtime_metrics
+      @runtime_metrics ||= heroku_log.message.split(SPACE_CHAR).to_h { |y| y.split(ASSIGN_CHAR) }
     end
 
     def monitored_types
       ENV.fetch('DYNO_TYPES', 'web').split(',')
     end
 
-    def monitored_proc_id?
-      monitored_types.include?(proc_type)
-    end
-
-    def proc_id
-      log[:proc_id].to_s
-    end
-
-    def app_name
-      log[:appname].to_s
-    end
-
-    def proc_type
-      proc_id.split('.')[0]
-    end
-
-    attr_reader :log
+    attr_reader :heroku_log
   end
 end

@@ -3,99 +3,42 @@
 require 'spec_helper'
 
 RSpec.describe DarkKnight::RuntimeMetric do
-  describe '#to_h' do
-    context 'log_runtime_metrics' do
-      it 'parses message' do
-        subject = described_class.new(parsed_log_runtime_metric).to_h
+  describe '.from_heroku_logs' do
+    it 'returns array of only valid runtime metrics' do
+      parsed_logs = [
+        parsed_log_http_request,
+        parsed_log_runtime_metric,
+        parsed_log_logplex
+      ]
+      heroku_logs = parsed_logs.map { |parsed_log| DarkKnight::HerokuLog.new(parsed_log) }
+      subject = described_class.from_heroku_logs(heroku_logs)
 
-        expect(subject).to eql(
-          {
-            'dyno' => 'heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e',
-            'sample#memory_cache' => '6.04MB',
-            'sample#memory_pgpgin' => '1978pages',
-            'sample#memory_pgpgout' => '158pages',
-            'sample#memory_quota' => '512.00MB',
-            'sample#memory_rss' => '1.07MB',
-            'sample#memory_swap' => '0.00MB',
-            'sample#memory_total' => '7.11MB',
-            'source' => 'web.1'
-          }
-        )
-      end
-    end
-
-    context 'http_request' do
-      it 'returns an empty hash' do
-        subject = described_class.new(parsed_log_http_request).to_h
-
-        expect(subject).to eql({})
-      end
-    end
-
-    context 'logplex' do
-      it 'returns an empty hash' do
-        subject = described_class.new(parsed_log_logplex).to_h
-
-        expect(subject).to eql({})
-      end
-    end
-
-    context 'invalid request' do
-      it 'returns an empty hash' do
-        subject = described_class.new({}).to_h
-
-        expect(subject).to eql({})
-      end
+      expect(subject.size).to be 1
+      expect(subject).to all(be_a(described_class))
     end
   end
 
-  describe '#irrelevant?' do
-    context 'log_runtime_metrics' do
-      it 'returns false if dyno is a monitored type' do
-        with_env('DYNO_TYPES', 'web') do
-          subject = described_class.new(parsed_log_runtime_metric)
+  describe '#monitored_dyno?' do
+    it 'returns true if dyno is a monitored type' do
+      with_env('DYNO_TYPES', 'web') do
+        subject = build_runtime_metric(proc_id: 'web.1')
 
-          expect(subject).not_to be_irrelevant
-        end
-      end
-
-      it 'returns true if dyno isnt a monitored type' do
-        with_env('DYNO_TYPES', 'worker1,worker2') do
-          subject = described_class.new(parsed_log_runtime_metric)
-
-          expect(subject).to be_irrelevant
-        end
+        expect(subject).to be_monitored_dyno
       end
     end
 
-    context 'http_request' do
-      it 'returns true' do
-        subject = described_class.new(parsed_log_http_request)
+    it 'returns false if dyno isnt a monitored type' do
+      with_env('DYNO_TYPES', 'worker1,worker2') do
+        subject = build_runtime_metric(proc_id: 'web.1')
 
-        expect(subject).to be_irrelevant
-      end
-    end
-
-    context 'logplex' do
-      it 'returns true' do
-        subject = described_class.new(parsed_log_logplex)
-
-        expect(subject).to be_irrelevant
-      end
-    end
-
-    context 'invalid request' do
-      it 'returns true' do
-        subject = described_class.new({})
-
-        expect(subject).to be_irrelevant
+        expect(subject).not_to be_monitored_dyno
       end
     end
   end
 
   describe '#dyno' do
-    it 'returns dyno' do
-      subject = described_class.new(parsed_log_runtime_metric)
+    it 'returns dyno identifier' do
+      subject = described_class.new(DarkKnight::HerokuLog.new(parsed_log_runtime_metric))
 
       expect(subject.dyno).to eql('heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e')
     end

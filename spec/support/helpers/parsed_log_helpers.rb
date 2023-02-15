@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 module ParsedLogHelpers
-  def parsed_log_runtime_metric(dyno: nil, memory_total: nil)
+  def parsed_log_runtime_metric(dyno: nil, memory_total: nil, proc_id: nil)
     dyno ||= 'heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e'
     memory_total ||= 7.11
+    proc_id ||= 'web.1'
 
     {
       priority: 134,
@@ -11,10 +12,10 @@ module ParsedLogHelpers
       emitted_at: '2023-02-11 20:17:07.957556 UTC',
       hostname: 'host',
       appname: 'heroku',
-      proc_id: 'web.1',
+      proc_id: proc_id,
       msg_id: nil,
       structured_data: nil,
-      message: "source=web.1 dyno=#{dyno} sample#memory_total=#{memory_total}MB sample#memory_rss=1.07MB sample#memory_cache=6.04MB sample#memory_swap=0.00MB sample#memory_pgpgin=1978pages sample#memory_pgpgout=158pages sample#memory_quota=512.00MB"
+      message: "source=#{proc_id} dyno=#{dyno} sample#memory_total=#{memory_total}MB sample#memory_rss=1.07MB sample#memory_cache=6.04MB sample#memory_swap=0.00MB sample#memory_pgpgin=1978pages sample#memory_pgpgout=158pages sample#memory_quota=512.00MB"
     }
   end
 

@@ -3,32 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe DarkKnight::Dyno do
-  describe '#from_runtime_metric' do
-    it 'creates a dyno object' do
-      subject = described_class.from_runtime_metric(web_runtime_metric)
-
-      expect(subject).to eq(
-        described_class.new(
-          source: 'web.1',
-          memory_quota: 512.00,
-          memory_total: 7.11
-        )
-      )
-    end
-
-    it 'creates an empty object given invalid input' do
-      subject = described_class.from_runtime_metric({})
-
-      expect(subject).to eq(
-        described_class.new(
-          source: '',
-          memory_quota: 0,
-          memory_total: 0
-        )
-      )
-    end
-  end
-
   describe '#restart_if_swapping' do
     it 'issues http request to heroku api if memory total exceeds memory quota' do
       stub_restart_request('todo', 'web.1')
@@ -95,21 +69,5 @@ RSpec.describe DarkKnight::Dyno do
 
       expect(subject).not_to be_swapping
     end
-  end
-
-  private
-
-  def web_runtime_metric
-    {
-      'dyno' => 'heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e',
-      'sample#memory_cache' => '6.04MB',
-      'sample#memory_pgpgin' => '1978pages',
-      'sample#memory_pgpgout' => '158pages',
-      'sample#memory_quota' => '512.00MB',
-      'sample#memory_rss' => '1.07MB',
-      'sample#memory_swap' => '0.00MB',
-      'sample#memory_total' => '7.11MB',
-      'source' => 'web.1'
-    }
   end
 end
