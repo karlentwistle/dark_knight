@@ -55,12 +55,5 @@ module DarkKnight
     def restarting?
       !!@restarting
     end
-
-    def ==(other)
-      instance_of?(other.class) &&
-        source == other.source &&
-        memory_quota == other.memory_quota &&
-        memory_total == other.memory_total
-    end
   end
 end
