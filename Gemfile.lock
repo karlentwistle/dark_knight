@@ -88,5 +88,8 @@ DEPENDENCIES
   timecop
   webmock
 
+RUBY VERSION
+   ruby 3.2.1p31
+
 BUNDLED WITH
    2.3.4
