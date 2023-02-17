@@ -43,9 +43,14 @@ module DarkKnight
 
         @restarting = true
 
-        if RestartDyno.run(source).success?
-          logger.info("restarting dyno #{source}")
-        else
+        begin
+          if RestartDyno.run(source).success?
+            logger.info("restarting dyno #{source}")
+          else
+            @restarting = false
+          end
+        rescue Faraday::Error
+          # TODO: this should be handled by RestartDyno
           @restarting = false
         end
       end
