@@ -66,19 +66,19 @@ RSpec.describe DarkKnight::Dyno do
   end
 
   describe '#swapping?' do
-    it 'returns true if memory_total exceeds memory_total' do
+    it 'returns true if memory_total exceeds memory_quota' do
       subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
       expect(subject).to be_swapping
     end
 
-    it 'returns false if memory_total equals memory_total' do
+    it 'returns false if memory_total equals memory_quota' do
       subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
 
       expect(subject).not_to be_swapping
     end
 
-    it 'returns false if memory_total is lower than memory_total' do
+    it 'returns false if memory_total is lower than memory_quota' do
       subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
 
       expect(subject).not_to be_swapping
