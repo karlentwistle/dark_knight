@@ -29,6 +29,10 @@ module DarkKnight
 
     attr_accessor :source, :memory_quota, :memory_total, :updated_at
 
+    def restart_required?
+      swapping?
+    end
+
     def swapping?
       memory_total > memory_quota
     end
