@@ -17,6 +17,7 @@ module DarkKnight
       @memory_quota = memory_quota
       @memory_total = memory_total
       @updated_at = Time.now
+      @mutex = Mutex.new
     end
 
     def update_from_metric(runtime_metric)
@@ -28,12 +29,6 @@ module DarkKnight
 
     attr_accessor :source, :memory_quota, :memory_total, :updated_at
 
-    def restart_if_swapping
-      return if restarting?
-
-      restart if swapping?
-    end
-
     def swapping?
       memory_total > memory_quota
     end
@@ -43,17 +38,22 @@ module DarkKnight
     end
 
     def restart
-      response = RestartDyno.run(source)
-      restarting! if response.success?
-    end
+      @mutex.synchronize do
+        return if @restarting
 
-    def restarting!
-      logger.info("restarting dyno #{source}")
-      @restarting = true
-    end
+        @restarting = true
 
-    def restarting?
-      !!@restarting
+        begin
+          if RestartDyno.run(source).success?
+            logger.info("restarting dyno #{source}")
+          else
+            @restarting = false
+          end
+        rescue Faraday::Error
+          # TODO: this should be handled by RestartDyno
+          @restarting = false
+        end
+      end
     end
   end
 end
