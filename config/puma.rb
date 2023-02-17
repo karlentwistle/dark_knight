@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 workers 0
-threads_count = 1
+threads_count = 5
 threads threads_count, threads_count
 
 rackup      DefaultRackup if defined?(DefaultRackup)
