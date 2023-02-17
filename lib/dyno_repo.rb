@@ -29,7 +29,9 @@ module DarkKnight
     end
 
     def restart_dynos_if_swapping
-      dynos.each_value(&:restart_if_swapping)
+      dynos.each_value do |dyno|
+        dyno.restart if dyno.swapping?
+      end
     end
 
     attr_reader :dynos
