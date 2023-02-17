@@ -7,10 +7,19 @@ module RestartHelpers
       .to_return(status: 202)
   end
 
+  def stub_failed_restart_request(app_id_or_name, dyno_id_or_name)
+    stub_request(:delete, restart_uri(app_id_or_name, dyno_id_or_name))
+      .with(headers: restart_headers)
+      .to_return(status: 500)
+  end
+
   def expect_restart_request(app_id_or_name, dyno_id_or_name)
-    expect(a_request(:delete, restart_uri(app_id_or_name, dyno_id_or_name))
-      .with(headers: restart_headers))
-      .to have_been_made.once
+    expect(a_restart_request(app_id_or_name, dyno_id_or_name)).to have_been_made.once
+  end
+
+  def a_restart_request(app_id_or_name, dyno_id_or_name)
+    a_request(:delete, restart_uri(app_id_or_name, dyno_id_or_name))
+      .with(headers: restart_headers)
   end
 
   def expect_no_request
