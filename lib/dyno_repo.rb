@@ -9,7 +9,7 @@ module DarkKnight
     def update_repo(runtime_metrics)
       runtime_metrics.each { |runtime_metric| initialize_or_update_dyno_from(runtime_metric) }
       forget_expired_dynos
-      restart_dynos_if_swapping
+      restart_dynos_if_required?
     end
 
     def initialize_or_update_dyno_from(runtime_metric)
@@ -28,9 +28,9 @@ module DarkKnight
       dynos.reject! { |_k, v| v.expired? }
     end
 
-    def restart_dynos_if_swapping
+    def restart_dynos_if_required?
       dynos.each_value do |dyno|
-        dyno.restart if dyno.swapping?
+        dyno.restart if dyno.restart_required?
       end
     end
 

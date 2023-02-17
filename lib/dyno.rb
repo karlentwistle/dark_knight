@@ -29,8 +29,12 @@ module DarkKnight
 
     attr_accessor :source, :memory_quota, :memory_total, :updated_at
 
-    def swapping?
-      memory_total > memory_quota
+    def process_type
+      source.split('.').first
+    end
+
+    def restart_required?
+      memory_total > restart_threshold
     end
 
     def expired?
@@ -53,6 +57,20 @@ module DarkKnight
           # TODO: this should be handled by RestartDyno
           @restarting = false
         end
+      end
+    end
+
+    private
+
+    def restart_threshold
+      @restart_threshold ||= fetch_restart_threshold
+    end
+
+    def fetch_restart_threshold
+      if (restart_threshold = ENV.fetch("#{process_type}_restart_threshold".upcase, nil))
+        restart_threshold.to_i
+      else
+        memory_quota
       end
     end
   end

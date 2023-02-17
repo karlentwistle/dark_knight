@@ -65,23 +65,51 @@ RSpec.describe DarkKnight::Dyno do
     end
   end
 
-  describe '#swapping?' do
-    it 'returns true if memory_total exceeds memory_total' do
-      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+  describe '#restart_required?' do
+    context 'restart threshold specified' do
+      it 'returns true if memory_total exceeds specified threshold' do
+        with_env('WEB_RESTART_THRESHOLD', '972.8') do
+          subject = described_class.new(source: 'web.1', memory_total: 1024.0, memory_quota: 1024.0)
 
-      expect(subject).to be_swapping
+          expect(subject).to be_restart_required
+        end
+      end
+
+      it 'returns false if memory_total equals specified threshold' do
+        with_env('WORKER1_RESTART_THRESHOLD', '512.0') do
+          subject = described_class.new(source: 'worker1.1', memory_total: 512.0, memory_quota: 1024.0)
+
+          expect(subject).not_to be_restart_required
+        end
+      end
+
+      it 'returns false if memory_total is lower than specified threshold' do
+        with_env('WEB_RESTART_THRESHOLD', '1024.0') do
+          subject = described_class.new(source: 'web.1', memory_total: 512.0, memory_quota: 1024.0)
+
+          expect(subject).not_to be_restart_required
+        end
+      end
     end
 
-    it 'returns false if memory_total equals memory_total' do
-      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
+    context 'no restart threshold specified' do
+      it 'returns true if memory_total exceeds memory_quota' do
+        subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
-      expect(subject).not_to be_swapping
-    end
+        expect(subject).to be_restart_required
+      end
 
-    it 'returns false if memory_total is lower than memory_total' do
-      subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
+      it 'returns false if memory_total equals memory_quota' do
+        subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 512.0)
 
-      expect(subject).not_to be_swapping
+        expect(subject).not_to be_restart_required
+      end
+
+      it 'returns false if memory_total is lower than memory_quota' do
+        subject = described_class.new(source: 'web.1', memory_quota: 512.00, memory_total: 256.0)
+
+        expect(subject).not_to be_restart_required
+      end
     end
   end
 end
