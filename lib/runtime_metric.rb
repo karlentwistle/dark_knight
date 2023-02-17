@@ -35,11 +35,11 @@ module DarkKnight
     end
 
     def memory_quota
-      runtime_metrics.fetch('sample#memory_quota').to_f
+      runtime_metrics.fetch('sample#memory_quota').to_i
     end
 
     def memory_total
-      runtime_metrics.fetch('sample#memory_total').to_f
+      runtime_metrics.fetch('sample#memory_total').to_i
     end
 
     def monitored_dyno?

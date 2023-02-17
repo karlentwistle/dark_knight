@@ -23,7 +23,7 @@ RSpec.describe DarkKnight::DynoRepo do
       )
 
       dyno = subject.dynos.fetch('heroku.15253441.a85b9e33-817d-479d-8bd9-d6c7d368b94e')
-      expect(dyno.memory_total).to be(64.0)
+      expect(dyno.memory_total).to be(64)
     end
 
     it 'forgets dyno if it hasnt received a log for 5 minutes' do

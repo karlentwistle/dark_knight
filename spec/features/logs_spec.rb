@@ -47,6 +47,19 @@ RSpec.describe '/logs' do
     expect_restart_request('todo', 'web.1')
   end
 
+  it 'issues restart request for dyno above restart threshold of monitored type' do
+    stub_restart_request('todo', 'web.1')
+
+    with_env('DYNO_TYPES', 'web') do
+      with_env('WEB_RESTART_THRESHOLD', '128') do
+        basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
+        post('/logs', log_fixture('web.1'))
+      end
+    end
+
+    expect_restart_request('todo', 'web.1')
+  end
+
   it 'ignores unmonitored dynos even if they\'re out of memory' do
     with_env('DYNO_TYPES', 'worker') do
       basic_authorize 'username', ENV.fetch('DRAIN_PASSWORD', nil)
