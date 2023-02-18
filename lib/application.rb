@@ -16,6 +16,9 @@ require_relative 'log_controller'
 require_relative 'restart_dyno_job'
 require_relative 'restart_dyno_request'
 require_relative 'runtime_metric'
+require_relative 'slack'
+require_relative 'slack_notification_job'
+require_relative 'slack_notification_request'
 
 module DarkKnight
   class Application

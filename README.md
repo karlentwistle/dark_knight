@@ -44,8 +44,8 @@ The following is the full list of ENV configuration options:
 | `AUTH_TOKEN` | [Heroku API authentication token](https://devcenter.heroku.com/articles/platform-api-quickstart#authentication) | `AUTH_TOKEN=cf0e05d9-4eca-4948-a012-b91fe9704bab` | N/A | ✅ |
 | `DYNO_TYPES` | Dynos to restart when swapping (R14) or over specified threshold | `DYNO_TYPES=web,worker` | `web` | ❌ |
 | `{DYNO_TYPE}_RESTART_THRESHOLD` | Threshold in megabytes for specific dyno type to restart if breached | `WEB_RESTART_THRESHOLD=1024` | Dyno memory quota | ❌ |
+| `SLACK_WEBHOOK_URL` | [Slack messages webhook URL](https://api.slack.com/messaging/webhooks) | `SLACK_WEBHOOK_URL=https://hooks.slack.com/services/top/secret/password` | N/A | ❌ |
 
 ## Future enhancements
 
-- Slack notifications
 - Backoff factor (So you can configure intervals between restarts for a dyno type)
