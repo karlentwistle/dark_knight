@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module DarkKnight
-  module RestartDyno
+  module RestartDynoRequest
     class << self
       def run(source)
         connection.delete("/apps/#{app_id_or_name}/dynos/#{source}")

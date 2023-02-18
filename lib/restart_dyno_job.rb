@@ -5,7 +5,7 @@ module DarkKnight
     include SuckerPunch::Job
 
     def perform(dyno)
-      if RestartDyno.run(dyno.source).success?
+      if RestartDynoRequest.run(dyno.source).success?
         logger.info("restarting dyno #{dyno.source}")
       else
         dyno.restart_failed

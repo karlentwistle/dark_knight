@@ -14,7 +14,7 @@ require_relative 'dyno_repo'
 require_relative 'heroku_log'
 require_relative 'log_controller'
 require_relative 'restart_dyno_job'
-require_relative 'restart_dyno'
+require_relative 'restart_dyno_request'
 require_relative 'runtime_metric'
 
 module DarkKnight
