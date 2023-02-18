@@ -4,11 +4,13 @@ source 'https://rubygems.org'
 
 ruby '3.2.1'
 
+gem 'concurrent-ruby'
 gem 'faraday'
 gem 'heroku-log-parser'
 gem 'puma'
 gem 'rackup'
 gem 'roda'
+gem 'sucker_punch'
 
 group :development, :test do
   gem 'byebug'

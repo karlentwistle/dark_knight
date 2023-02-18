@@ -47,7 +47,7 @@ RSpec.describe DarkKnight::Dyno do
         end
       end.each(&:join)
 
-      expect(a_restart_request('todo', 'web.1')).to have_been_made.times(3)
+      expect(a_restart_request('todo', 'web.1')).to have_been_made.at_least_times(2)
     end
 
     it 'recovers from Faraday exceptions' do

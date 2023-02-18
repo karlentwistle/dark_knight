@@ -4,6 +4,8 @@ require 'faraday'
 require 'heroku-log-parser'
 require 'rack'
 require 'roda'
+require 'sucker_punch'
+require 'concurrent'
 
 require_relative 'logging'
 
@@ -11,6 +13,7 @@ require_relative 'dyno'
 require_relative 'dyno_repo'
 require_relative 'heroku_log'
 require_relative 'log_controller'
+require_relative 'restart_dyno_job'
 require_relative 'restart_dyno'
 require_relative 'runtime_metric'
 

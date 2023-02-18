@@ -17,7 +17,7 @@ module DarkKnight
       @memory_quota = memory_quota
       @memory_total = memory_total
       @updated_at = Time.now
-      @mutex = Mutex.new
+      @restart_semaphore = Mutex.new
     end
 
     def update_from_metric(runtime_metric)
@@ -42,25 +42,22 @@ module DarkKnight
     end
 
     def restart
-      @mutex.synchronize do
+      restart_semaphore.synchronize do
         return if @restarting
 
         @restarting = true
-
-        begin
-          if RestartDyno.run(source).success?
-            logger.info("restarting dyno #{source}")
-          else
-            @restarting = false
-          end
-        rescue Faraday::Error
-          # TODO: this should be handled by RestartDyno
-          @restarting = false
-        end
       end
+
+      RestartDynoJob.perform_async(self)
+    end
+
+    def restart_failed
+      restart_semaphore.synchronize { @restarting = false }
     end
 
     private
+
+    attr_reader :restart_semaphore
 
     def restart_threshold
       @restart_threshold ||= fetch_restart_threshold

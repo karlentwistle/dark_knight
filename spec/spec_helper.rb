@@ -3,6 +3,7 @@
 require 'webmock/rspec'
 require 'byebug'
 require 'timecop'
+require 'sucker_punch/testing/inline'
 require_relative '../lib/application'
 
 ENV['DRAIN_PASSWORD'] = 'password'
