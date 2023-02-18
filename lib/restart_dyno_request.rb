@@ -2,9 +2,17 @@
 
 module DarkKnight
   module RestartDynoRequest
+    class RequestFailed
+      def success?
+        false
+      end
+    end
+
     class << self
       def run(source)
         connection.delete("/apps/#{app_id_or_name}/dynos/#{source}")
+      rescue Faraday::Error
+        RequestFailed.new
       end
 
       def connection

@@ -10,8 +10,6 @@ module DarkKnight
       else
         dyno.restart_failed
       end
-    rescue Faraday::Error
-      dyno.restart_failed
     end
   end
 end
