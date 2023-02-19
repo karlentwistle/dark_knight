@@ -10,6 +10,8 @@ gem 'heroku-log-parser'
 gem 'puma'
 gem 'rackup'
 gem 'roda'
+gem 'sequel'
+gem 'sqlite3'
 gem 'sucker_punch'
 
 group :development, :test do

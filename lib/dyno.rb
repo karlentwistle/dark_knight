@@ -1,40 +1,36 @@
 # frozen_string_literal: true
 
 module DarkKnight
-  class Dyno
+  class Dyno < Sequel::Model
     include Logging
 
-    def self.from_runtime_metric(runtime_metric)
-      new(
-        source: runtime_metric.source,
-        memory_quota: runtime_metric.memory_quota,
-        memory_total: runtime_metric.memory_total
-      )
+    set_primary_key [:dyno]
+    unrestrict_primary_key
+    plugin :timestamps, create: :updated_at, update: :updated_at
+    plugin :validation_helpers
+    plugin :update_or_create
+
+    def self.delete_expired
+      where { updated_at < Time.now - (5 * 60) }.delete
     end
 
-    def initialize(source:, memory_quota:, memory_total:)
-      @source = source
-      @memory_quota = memory_quota
-      @memory_total = memory_total
-      @updated_at = Time.now
-      @restart_semaphore = Mutex.new
+    def self.restart_dynos
+      where { memory_total > restart_threshold }.where(restarting: false).each(&:restart)
     end
 
-    def update_from_metric(runtime_metric)
-      self.source = runtime_metric.source
-      self.memory_quota = runtime_metric.memory_quota
-      self.memory_total = runtime_metric.memory_total
-      self.updated_at = Time.now
+    def validate
+      super
+      validates_presence %i[dyno source memory_quota memory_total updated_at]
+      validates_unique :dyno
     end
 
-    attr_accessor :source, :memory_quota, :memory_total, :updated_at
+    def before_create
+      self.restart_threshold ||= fetch_restart_threshold
+      super
+    end
 
     def process_type
       source.split('.').first
-    end
-
-    def restart_required?
-      memory_total > restart_threshold
     end
 
     def expired?
@@ -42,26 +38,21 @@ module DarkKnight
     end
 
     def restart
-      restart_semaphore.synchronize do
-        return if @restarting
+      return if restarting?
 
-        @restarting = true
-      end
-
+      update(restarting: true)
       RestartDynoJob.perform_async(self)
     end
 
     def restart_failed
-      restart_semaphore.synchronize { @restarting = false }
+      update(restarting: false)
+    end
+
+    def restarting?
+      !!restarting
     end
 
     private
-
-    attr_reader :restart_semaphore
-
-    def restart_threshold
-      @restart_threshold ||= fetch_restart_threshold
-    end
 
     def fetch_restart_threshold
       if (restart_threshold = ENV.fetch("#{process_type}_restart_threshold".upcase, nil))
