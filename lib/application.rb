@@ -5,7 +5,6 @@ require 'heroku-log-parser'
 require 'rack'
 require 'roda'
 require 'sucker_punch'
-require 'concurrent'
 require 'sequel'
 
 require_relative 'logging'
