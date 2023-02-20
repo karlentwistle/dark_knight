@@ -83,7 +83,6 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
-  concurrent-ruby
   faraday
   heroku-log-parser
   puma
