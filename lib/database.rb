@@ -9,8 +9,11 @@ module DarkKnight
     Integer :memory_quota, null: false
     Integer :memory_total, null: false
     Integer :restart_threshold, null: false
-    TrueClass :restarting, default: false
-    DateTime :updated_at
-    Integer :lock_version, default: 0
+    DateTime :updated_at, null: false
+  end
+
+  DB.create_table :source_restart_locks do
+    String :source, null: false, index: { unique: true }
+    DateTime :expires_at, null: false
   end
 end

@@ -13,7 +13,16 @@ module DarkKnight
         end
       end
 
+      delete_expired
+      restart_dynos
+    end
+
+    def delete_expired
+      SourceRestartLock.delete_expired
       Dyno.delete_expired
+    end
+
+    def restart_dynos
       Dyno.restart_dynos
     end
   end

@@ -3,6 +3,7 @@ AllCops:
 
 require:
   - rubocop-performance
+  - rubocop-sequel
 
 Style/Documentation:
   Enabled: false
