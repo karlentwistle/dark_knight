@@ -2,13 +2,12 @@
 
 module DarkKnight
   class Dyno < Sequel::Model
-    include Logging
-
     set_primary_key [:dyno]
     unrestrict_primary_key
+    plugin :optimistic_locking
     plugin :timestamps, create: :updated_at, update: :updated_at
-    plugin :validation_helpers
     plugin :update_or_create
+    plugin :validation_helpers
 
     def self.delete_expired
       where { updated_at < Time.now - (5 * 60) }.delete
@@ -33,10 +32,6 @@ module DarkKnight
       source.split('.').first
     end
 
-    def expired?
-      updated_at < Time.now - (5 * 60)
-    end
-
     def restart
       return if restarting?
 
@@ -48,11 +43,12 @@ module DarkKnight
       update(restarting: false)
     end
 
-    def restarting?
-      !!restarting
-    end
-
     private
+
+    def restarting?
+      refresh
+      typecast_value(:boolean, get_column_value(:restarting))
+    end
 
     def fetch_restart_threshold
       if (restart_threshold = ENV.fetch("#{process_type}_restart_threshold".upcase, nil))

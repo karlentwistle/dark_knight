@@ -11,5 +11,6 @@ module DarkKnight
     Integer :restart_threshold, null: false
     TrueClass :restarting, default: false
     DateTime :updated_at
+    Integer :lock_version, default: 0
   end
 end

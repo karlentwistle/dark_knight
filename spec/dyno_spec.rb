@@ -7,7 +7,7 @@ RSpec.describe DarkKnight::Dyno do
     it 'issues restart request to heroku api' do
       stub_successful_restart_request('todo', 'web.1')
 
-      subject = described_class.new(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      subject = described_class.create(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
       subject.restart
 
@@ -25,7 +25,7 @@ RSpec.describe DarkKnight::Dyno do
     end
 
     it 'issues requests to heroku api until response succeeds' do
-      subject = described_class.new(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      subject = described_class.create(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
       stub_failed_restart_request('todo', 'web.1')
 
@@ -41,7 +41,7 @@ RSpec.describe DarkKnight::Dyno do
     it 'recovers from Faraday exceptions' do
       # TODO: this should be a spec on RestartDyno
 
-      subject = described_class.new(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      subject = described_class.create(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
 
       stub_restart_request('todo', 'web.1').to_timeout
       subject.restart
@@ -50,6 +50,18 @@ RSpec.describe DarkKnight::Dyno do
       subject.restart
 
       expect(a_restart_request('todo', 'web.1')).to have_been_made.twice
+    end
+
+    it 'wont issue duplicate restart if another instance of dyno already triggered restart' do
+      stub_successful_restart_request('todo', 'web.1')
+
+      subject = described_class.create(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+      duplicate = described_class.where(dyno: 'uuid').first
+
+      subject.restart
+      duplicate.restart
+
+      expect(a_restart_request('todo', 'web.1')).to have_been_made.once
     end
   end
 end
