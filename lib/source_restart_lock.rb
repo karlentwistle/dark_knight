@@ -5,9 +5,20 @@ module DarkKnight
     set_primary_key [:source]
     unrestrict_primary_key
     plugin :validation_helpers
+    plugin :update_or_create
 
-    def self.delete_expired
-      where { expires_at <= Time.now }.delete
+    def self.update_or_create_by(source)
+      if (existing = find(source:))
+        existing.reset_expires_at
+        existing.save_changes
+        existing
+      else
+        create(source:)
+      end
+    end
+
+    def self.source_locked?(source)
+      (existing = find(source:)) && existing.expires_at > Time.now
     end
 
     def validate
@@ -23,6 +34,10 @@ module DarkKnight
 
     def process_type
       source.split('.').first
+    end
+
+    def reset_expires_at
+      self.expires_at = fetch_expires_at
     end
 
     private
