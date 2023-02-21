@@ -4,7 +4,6 @@ module DarkKnight
   class Dyno < Sequel::Model
     set_primary_key [:dyno]
     unrestrict_primary_key
-    plugin :optimistic_locking
     plugin :timestamps, create: :updated_at, update: :updated_at
     plugin :update_or_create
     plugin :validation_helpers
@@ -14,16 +13,16 @@ module DarkKnight
     end
 
     def self.restart_dynos
-      where { memory_total > restart_threshold }.where(restarting: false).each(&:restart)
+      where { memory_total > restart_threshold }.each(&:restart)
     end
 
     def validate
       super
-      validates_presence %i[dyno source memory_quota memory_total updated_at]
+      validates_presence %i[dyno source memory_quota memory_total updated_at restart_threshold]
       validates_unique :dyno
     end
 
-    def before_create
+    def before_validation
       self.restart_threshold ||= fetch_restart_threshold
       super
     end
@@ -33,21 +32,20 @@ module DarkKnight
     end
 
     def restart
-      return if restarting?
+      return if locked?
 
-      update(restarting: true)
+      SourceRestartLock.create(source:)
       RestartDynoJob.perform_async(self)
     end
 
     def restart_failed
-      update(restarting: false)
+      SourceRestartLock.where(source:).delete
     end
 
     private
 
-    def restarting?
-      refresh
-      typecast_value(:boolean, get_column_value(:restarting))
+    def locked?
+      SourceRestartLock.where(source:).count >= 1
     end
 
     def fetch_restart_threshold

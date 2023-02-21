@@ -19,6 +19,7 @@ group :development, :test do
   gem 'rspec'
   gem 'rubocop'
   gem 'rubocop-performance'
+  gem 'rubocop-sequel'
   gem 'timecop'
   gem 'webmock'
 end
