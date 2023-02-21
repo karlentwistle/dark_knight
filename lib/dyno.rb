@@ -34,7 +34,7 @@ module DarkKnight
     def restart
       return if locked?
 
-      SourceRestartLock.create(source:)
+      SourceRestartLock.update_or_create_by(source)
       RestartDynoJob.perform_async(self)
     end
 
@@ -45,7 +45,7 @@ module DarkKnight
     private
 
     def locked?
-      SourceRestartLock.where(source:).count >= 1
+      SourceRestartLock.source_locked?(source)
     end
 
     def fetch_restart_threshold

@@ -18,7 +18,6 @@ module DarkKnight
     end
 
     def delete_expired
-      SourceRestartLock.delete_expired
       Dyno.delete_expired
     end
 
