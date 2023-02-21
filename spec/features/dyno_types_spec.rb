@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'rack/test'
 require_relative '../../lib/application'
 
-RSpec.describe '/logs' do
+RSpec.describe 'DYNO_TYPES' do
   include Rack::Test::Methods
 
   def app
