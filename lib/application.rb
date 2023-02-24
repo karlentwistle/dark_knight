@@ -33,7 +33,6 @@ module DarkKnight
         end
 
         route do |r|
-          # POST /logs
           r.post 'logs' do
             controller = LogController.new
             response.status, body = controller.call(request)
