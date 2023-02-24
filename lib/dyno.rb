@@ -32,10 +32,9 @@ module DarkKnight
     end
 
     def restart
-      return if locked?
-
-      SourceRestartLock.update_or_create_by(source)
-      RestartDynoJob.perform_async(self)
+      SourceRestartLock.if_source_unlocked(source) do
+        RestartDynoJob.perform_async(self)
+      end
     end
 
     def restart_failed
