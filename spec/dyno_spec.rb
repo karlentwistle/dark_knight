@@ -63,5 +63,18 @@ RSpec.describe DarkKnight::Dyno do
 
       expect(a_restart_request('todo', 'web.1')).to have_been_made.once
     end
+
+    it 'wont issue duplicate restarts for the same dyno uuid' do
+      stub_successful_restart_request('todo', 'web.1')
+
+      subject = described_class.create(dyno: 'uuid', source: 'web.1', memory_quota: 512.00, memory_total: 513.5)
+
+      with_env('WEB_RESTART_WINDOW', '-1') do
+        subject.restart
+        subject.restart
+      end
+
+      expect(a_restart_request('todo', 'web.1')).to have_been_made.once
+    end
   end
 end

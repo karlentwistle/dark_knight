@@ -22,8 +22,8 @@ RSpec.describe '{DYNO_TYPE}_RESTART_WINDOW' do
           post('/logs', log_fixture('web.1.out_of_memory'))
         end
 
-        post('/logs', log_fixture('web.1'))
-        post('/logs', log_fixture('web.1.out_of_memory'))
+        post('/logs', log_fixture('web.1.new_dyno'))
+        post('/logs', log_fixture('web.1.new_dyno.out_of_memory'))
       end
     end
 
