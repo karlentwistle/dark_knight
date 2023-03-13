@@ -15,6 +15,6 @@ Sequel.migration do
   end
 
   down do
-    drop_table(:dyno)
+    drop_table(:dynos)
   end
 end
