@@ -78,7 +78,7 @@ GEM
       mini_portile2 (~> 2.8.0)
     sucker_punch (3.1.0)
       concurrent-ruby (~> 1.0)
-    timecop (0.9.6)
+    timecop (0.9.7)
     unicode-display_width (2.4.2)
     webmock (3.18.1)
       addressable (>= 2.8.0)
