@@ -76,7 +76,7 @@ GEM
     ruby2_keywords (0.0.5)
     sequel (5.74.0)
       bigdecimal
-    sqlite3 (1.6.8)
+    sqlite3 (1.6.9)
       mini_portile2 (~> 2.8.0)
     sucker_punch (3.1.0)
       concurrent-ruby (~> 1.0)
