@@ -19,7 +19,7 @@ GEM
     heroku-log-parser (0.4.0)
     json (2.7.2)
     language_server-protocol (3.17.0.3)
-    mini_portile2 (2.8.5)
+    mini_portile2 (2.8.6)
     net-http (0.4.1)
       uri
     nio4r (2.7.0)
@@ -76,7 +76,7 @@ GEM
     ruby-progressbar (1.13.0)
     sequel (5.79.0)
       bigdecimal
-    sqlite3 (1.7.3)
+    sqlite3 (2.0.0)
       mini_portile2 (~> 2.8.0)
     sucker_punch (3.2.0)
       concurrent-ruby (~> 1.0)
