@@ -79,7 +79,7 @@ GEM
     ruby-progressbar (1.13.0)
     sequel (5.83.1)
       bigdecimal
-    sqlite3 (2.0.3)
+    sqlite3 (2.0.4)
       mini_portile2 (~> 2.8.0)
     strscan (3.1.0)
     sucker_punch (3.2.0)
