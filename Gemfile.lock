@@ -42,7 +42,7 @@ GEM
     rackup (2.2.1)
       rack (>= 3)
     rainbow (3.1.1)
-    regexp_parser (2.11.0)
+    regexp_parser (2.11.1)
     rexml (3.4.1)
     roda (3.94.0)
       rack
@@ -59,7 +59,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.4)
-    rubocop (1.79.1)
+    rubocop (1.79.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -81,7 +81,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1, < 2)
     ruby-progressbar (1.13.0)
-    sequel (5.95.0)
+    sequel (5.95.1)
       bigdecimal
     sqlite3 (2.7.3)
       mini_portile2 (~> 2.8.0)
