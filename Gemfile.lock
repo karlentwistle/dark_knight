@@ -81,7 +81,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (>= 1.72.1, < 2)
     ruby-progressbar (1.13.0)
-    sequel (5.96.0)
+    sequel (5.97.0)
       bigdecimal
     sqlite3 (2.7.4)
       mini_portile2 (~> 2.8.0)
